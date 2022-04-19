@@ -22,6 +22,8 @@ int main(){
 	char *pCadena1;
 	pCadena1 = cadena1;
 
+	//Comentario
+
 	printf("\n Ingrese la cantidad de tareas a cargar: ");
 	scanf("%i", &cantidadTareas);
 
