@@ -16,50 +16,58 @@ int main(){
 
 	int cantidadTareas, opcion, contador = 0;
 	struct Tarea **tareas;
-	struct Tarea **tareasNoRealizadas;
+	struct Tarea **tareasRealizadas;
+
+	char *Buff;
+	Buff= (char *) malloc(100*sizeof(char));
 
 	//Esto lo tengo que arreglar
 	char cadena1[10] = "Tarea 1";
 	char cadena2[10] = "Tarea 2";
 	char cadena3[10] = "Tarea 3";
-	char *pCadena1;
+	char *pCadena1, *pCadena2, *pCadena3;
 	pCadena1 = cadena1;
-
+	pCadena2 = cadena2;
+	pCadena3 = cadena3;
 
 	printf("\n Ingrese la cantidad de tareas a cargar: ");
 	scanf("%i", &cantidadTareas);
 
 	tareas = (struct Tarea **) malloc(sizeof(struct Tarea) * cantidadTareas);
-	tareasNoRealizadas = (struct Tarea **) malloc(sizeof(struct Tarea) * cantidadTareas);
-
-	//Por ahora tan solo cargo 3
+	tareasRealizadas = (struct Tarea **) malloc(sizeof(struct Tarea) * cantidadTareas);
+	
+	printf("\n-------------------Por favor. Carge las descripciones de las tareas-------------------\n\n");
 	for (int i = 0; i < cantidadTareas; i++)
 	{
 		tareas[i] = (struct Tarea *) malloc(sizeof(struct Tarea));
-		tareas[i]->Descripcion = (char *) malloc(sizeof(char) * 10); 
 		
-
+		//ID indexado
 		tareas[i]->TareaID = i;
-		//Tambien hace falta la descripcion
-		strcpy(tareas[i]->Descripcion,pCadena1);
-		//Hace falta cambiar para que esto sea un numero random
-		tareas[i]->Duracion = 5;
+
+		//Bloque para Buff --- Ahora la carga de tareas no es indexada, sino que se hace manualmente.
+		fflush(stdin);
+		printf("\nIngrese la descripcion de la tarea ID[%i]: ", i);
+		gets(Buff);
+		tareas[i]->Descripcion = (char *) malloc((strlen(Buff)+1)*sizeof(char));
+		strcpy(tareas[i]->Descripcion,Buff);
 		
+		//Ahora se asigna una duración aleatoria
+		tareas[i]->Duracion = rand()%(90)+10;
+	}
+
+	// Este bloque lo que hace es darle memoria al otro arreglo de tareas
+	for (int i = 0; i < cantidadTareas; i++)
+	{
+		tareasRealizadas[i] = (struct Tarea *) malloc(sizeof(struct Tarea));
+		tareasRealizadas[i]->Descripcion = (char *) malloc(sizeof(char) * 10); 
 
 	}
 
-	for (int i = 0; i < cantidadTareas; i++)
-	{
-		tareasNoRealizadas[i] = (struct Tarea *) malloc(sizeof(struct Tarea));
-		tareasNoRealizadas[i]->Descripcion = (char *) malloc(sizeof(char) * 10); 
-
-	}
-
-	printf("\nLista de tareas:");
+	printf("\n--------Lista de tareas: --------");
 	for (int i = 0; i < cantidadTareas; i++)
 	{
 
-		printf("\n Nueva tarea: ");
+		printf("\n Nueva tarea ");
 		printf("\n ID de la tarea: %i", tareas[i]->TareaID);
 		printf("\n Descripcion de la tarea: %s", tareas[i]->Descripcion);
 		printf("\n Duracion de la tarea: %i", tareas[i]->Duracion);
@@ -69,14 +77,12 @@ int main(){
 
 		if (opcion == 1)
 		{
+
+			tareasRealizadas[contador]->TareaID = tareas[i]->TareaID;
+			tareasRealizadas[contador]->Duracion = tareas[contador]->Duracion;
+			strcpy(tareasRealizadas[contador]->Descripcion,tareas[i]->Descripcion);
 			contador++;
-			tareasNoRealizadas[contador]->TareaID = tareas[i]->TareaID;
-			tareasNoRealizadas[contador]->Duracion = tareas[contador]->Duracion;
-			strcpy(tareasNoRealizadas[contador]->Descripcion,tareas[i]->Descripcion);
-
-			//Todavia nos falta hacer que apunte al NULL (debo hacer un free a la liberada)
-
-
+			tareas[i] = NULL;
 
 		}
 		
@@ -89,30 +95,35 @@ int main(){
 	for (int i = 0; i < cantidadTareas; i++)
 	{
 
-		printf("\n Nueva tarea: ");
+		if(tareas[i] != NULL){
+		printf("\n ---------- ");
 		printf("\n ID de la tarea: %i", tareas[i]->TareaID);
 		printf("\n Descripcion de la tarea: %s", tareas[i]->Descripcion);
 		printf("\n Duracion de la tarea: %i", tareas[i]->Duracion);
-
+		}
 	}
 
-	printf("\n\n  Tareas sin realizar: ");
+	printf("\n\n  Tareas realizadas: ");
 	for (int i = 0; i < contador; i++)
 	{
 
-		//Aqui hay problemas con el bucle, ya que leera todas las Norealizadas anteriores al indice del contador
-		printf("\n Nueva tarea: ");
-		printf("\n ID de la tarea: %i", tareasNoRealizadas[i]->TareaID);
-		printf("\n Descripcion de la tarea: %s", tareasNoRealizadas[i]->Descripcion);
-		printf("\n Duracion de la tarea: %i", tareasNoRealizadas[i]->Duracion);
+		printf("\n ---------- ");
+		printf("\n ID de la tarea: %i", tareasRealizadas[i]->TareaID);
+		printf("\n Descripcion de la tarea: %s", tareasRealizadas[i]->Descripcion);
+		printf("\n Duracion de la tarea: %i", tareasRealizadas[i]->Duracion);
 
 	}
 
-	//Falta liberar toda la memoria
+	//Libero la memoria
+	free(Buff);
+	for (int i = 0; i < cantidadTareas; i++){
+	free(tareas[i]);
+	free(tareasRealizadas[i]);
+	}
 	
 	
 
-	printf("Fin del programa");
+	printf("\nFin del programa");
 
 	return 0;
 }
