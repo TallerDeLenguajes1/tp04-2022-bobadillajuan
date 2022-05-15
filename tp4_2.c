@@ -9,13 +9,15 @@ char *Descripcion; //
 int Duracion; // entre 10 – 100
 };
 
-void BuscarTarea(struct Tarea **, char *clave, int cantidadTareas);
+void BusquedaPorPalabra(struct Tarea **, char *clave, int cantidadTareas);
+//Cambios en rama BuscarTarea
+void BusquedaPorId(struct Tarea **, int id, int cantidadTareas);
 
 
 int main(){
 
 
-	int cantidadTareas, opcion, contador = 0;
+	int cantidadTareas, opcion, contador = 0, BuscarID;
 	struct Tarea **tareas;
 	struct Tarea **tareasRealizadas;
 
@@ -51,13 +53,17 @@ int main(){
 	printf("\nPor favor ingrese una palabra clave para buscar la tarea: ");
 	fflush(stdin);
 	gets(Buff);
-	BuscarTarea(tareas, Buff, cantidadTareas);
+	BusquedaPorPalabra(tareas, Buff, cantidadTareas);
+	// Bloque de busqueda de tareas
+	printf("\nPor favor ingrese el ID la tarea a buscar: ");
+	scanf("%i", &BuscarID);
+	BusquedaPorId(tareas, BuscarID, cantidadTareas);
 
 	// Este bloque lo que hace es darle memoria al otro arreglo de tareas
 	for (int i = 0; i < cantidadTareas; i++)
 	{
 		tareasRealizadas[i] = (struct Tarea *) malloc(sizeof(struct Tarea));
-		tareasRealizadas[i]->Descripcion = (char *) malloc(sizeof(char) * 10); 
+		tareasRealizadas[i]->Descripcion = (char *) malloc(sizeof(char) * 100); 
 
 	}
 
@@ -77,7 +83,7 @@ int main(){
 		{
 
 			tareasRealizadas[contador]->TareaID = tareas[i]->TareaID;
-			tareasRealizadas[contador]->Duracion = tareas[contador]->Duracion;
+			tareasRealizadas[contador]->Duracion = tareas[i]->Duracion;
 			strcpy(tareasRealizadas[contador]->Descripcion,tareas[i]->Descripcion);
 			contador++;
 			tareas[i] = NULL;
@@ -126,12 +132,28 @@ int main(){
 	return 0;
 }
 
-void BuscarTarea(struct Tarea ** tareas, char *clave, int cantidadTareas){
-
+void BusquedaPorPalabra(struct Tarea ** tareas, char *clave, int cantidadTareas){
 	int controlador=0;
 	for (int i = 0; i < cantidadTareas; i++){
 		if(tareas[i] != NULL){
 			if(strcmp(tareas[i]->Descripcion, clave) == 0){
+				printf("\nTarea encontrada:");
+				printf("\n ID de la tarea: %i", tareas[i]->TareaID);
+				printf("\n Descripcion de la tarea: %s", tareas[i]->Descripcion);
+				printf("\n Duracion de la tarea: %i", tareas[i]->Duracion);
+				controlador++;
+			}
+		}
+	}
+	if(controlador == 0)
+	printf("\nTarea no encontrada.");
+}
+
+void BusquedaPorId(struct Tarea ** tareas, int id, int cantidadTareas){
+	int controlador=0;
+	for (int i = 0; i < cantidadTareas; i++){
+		if(tareas[i] != NULL){
+			if(tareas[i]->TareaID == id){
 				printf("\nTarea encontrada:");
 				printf("\n ID de la tarea: %i", tareas[i]->TareaID);
 				printf("\n Descripcion de la tarea: %s", tareas[i]->Descripcion);
