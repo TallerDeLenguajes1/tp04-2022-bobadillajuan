@@ -9,6 +9,7 @@ char *Descripcion; //
 int Duracion; // entre 10 – 100
 };
 
+void BuscarTarea(struct Tarea **, char *clave, int cantidadTareas);
 
 
 int main(){
@@ -45,6 +46,12 @@ int main(){
 		//Ahora se asigna una duración aleatoria
 		tareas[i]->Duracion = rand()%(90)+10;
 	}
+
+	//Bloque de busqueda
+	printf("\nPor favor ingrese una palabra clave para buscar la tarea: ");
+	fflush(stdin);
+	gets(Buff);
+	BuscarTarea(tareas, Buff, cantidadTareas);
 
 	// Este bloque lo que hace es darle memoria al otro arreglo de tareas
 	for (int i = 0; i < cantidadTareas; i++)
@@ -117,4 +124,22 @@ int main(){
 	printf("\nFin del programa");
 
 	return 0;
+}
+
+void BuscarTarea(struct Tarea ** tareas, char *clave, int cantidadTareas){
+
+	int controlador=0;
+	for (int i = 0; i < cantidadTareas; i++){
+		if(tareas[i] != NULL){
+			if(strcmp(tareas[i]->Descripcion, clave) == 0){
+				printf("\nTarea encontrada:");
+				printf("\n ID de la tarea: %i", tareas[i]->TareaID);
+				printf("\n Descripcion de la tarea: %s", tareas[i]->Descripcion);
+				printf("\n Duracion de la tarea: %i", tareas[i]->Duracion);
+				controlador++;
+			}
+		}
+	}
+	if(controlador == 0)
+	printf("\nTarea no encontrada.");
 }
