@@ -21,15 +21,6 @@ int main(){
 	char *Buff;
 	Buff= (char *) malloc(100*sizeof(char));
 
-	//Esto lo tengo que arreglar
-	char cadena1[10] = "Tarea 1";
-	char cadena2[10] = "Tarea 2";
-	char cadena3[10] = "Tarea 3";
-	char *pCadena1, *pCadena2, *pCadena3;
-	pCadena1 = cadena1;
-	pCadena2 = cadena2;
-	pCadena3 = cadena3;
-
 	printf("\n Ingrese la cantidad de tareas a cargar: ");
 	scanf("%i", &cantidadTareas);
 
