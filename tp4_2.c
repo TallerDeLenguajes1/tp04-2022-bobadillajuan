@@ -9,12 +9,14 @@ char *Descripcion; //
 int Duracion; // entre 10 – 100
 };
 
+//Cambios en rama BuscarTarea
+void BuscarTarea(struct Tarea **, int id, int cantidadTareas);
 
 
 int main(){
 
 
-	int cantidadTareas, opcion, contador = 0;
+	int cantidadTareas, opcion, contador = 0, BuscarID;
 	struct Tarea **tareas;
 	struct Tarea **tareasRealizadas;
 
@@ -46,11 +48,16 @@ int main(){
 		tareas[i]->Duracion = rand()%(90)+10;
 	}
 
+	// Bloque de busqueda de tareas
+	printf("\nPor favor ingrese el ID la tarea a buscar: ");
+	scanf("%i", &BuscarID);
+	BuscarTarea(tareas, BuscarID, cantidadTareas);
+
 	// Este bloque lo que hace es darle memoria al otro arreglo de tareas
 	for (int i = 0; i < cantidadTareas; i++)
 	{
 		tareasRealizadas[i] = (struct Tarea *) malloc(sizeof(struct Tarea));
-		tareasRealizadas[i]->Descripcion = (char *) malloc(sizeof(char) * 10); 
+		tareasRealizadas[i]->Descripcion = (char *) malloc(sizeof(char) * 100); 
 
 	}
 
@@ -117,4 +124,22 @@ int main(){
 	printf("\nFin del programa");
 
 	return 0;
+}
+
+void BuscarTarea(struct Tarea ** tareas, int id, int cantidadTareas){
+
+	int controlador=0;
+	for (int i = 0; i < cantidadTareas; i++){
+		if(tareas[i] != NULL){
+			if(tareas[i]->TareaID == id){
+				printf("\nTarea encontrada:");
+				printf("\n ID de la tarea: %i", tareas[i]->TareaID);
+				printf("\n Descripcion de la tarea: %s", tareas[i]->Descripcion);
+				printf("\n Duracion de la tarea: %i", tareas[i]->Duracion);
+				controlador++;
+			}
+		}
+	}
+	if(controlador == 0)
+	printf("\nTarea no encontrada.");
 }
